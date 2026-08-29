@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول المشرف - منصة وجهتك</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body {
+            background-color: #1e293b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #1e213b;
+        }
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .login-card h2 { margin-bottom: 20px; color: #1e293b; font-size: 22px; }
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #334155; }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+        .login-btn {
+            width: 100%;
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .login-btn:hover { background: #0369a1; }
+        .error-msg { color: #ef4444; font-size: 13px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <h2>🔐 دخول لوحة التحكم</h2>
+    <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+            <label>كلمة المرور السرية:</label>
+            <input type="password" id="adminPassword" placeholder="أدخل كلمة مرور المشرف..." required>
+        </div>
+        <button type="submit" class="login-btn">دخول آمن</button>
+        <div id="errorText" class="error-msg">كلمة المرور غير صحيحة! يرجى المحاولة مرة أخرى.</div>
+    </form>
+</div>
+
+<script>
+    function handleLogin(e) {
+        e.preventDefault();
+        var pass = document.getElementById('adminPassword').value;
+        
+        // كلمة المرور الخاصة بك (يمكنك تغييرها لاحقاً كما تريد)
+        var securePassword = "admin123_Wojhatak"; 
+
+        if (pass === securePassword) {
+            // حفظ حالة الجلسة لكي يُسمح له بالدخول للوحة
+            localStorage.setItem("isAdminLoggedIn", "true");
+            // الانتقال إلى لوحة التحكم الفعلية
+            window.location.href = "admin.html";
+        } else {
+            document.getElementById('errorText').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

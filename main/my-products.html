@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة مبيعاتي وسلعي - منصة وجهتك</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; text-align: right; }
+        body { background-color: #f4f7f6; color: #333; padding: 20px; }
+        .container { max-width: 1000px; margin: 20px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { color: #1e293b; margin-bottom: 20px; font-size: 24px; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #334155; font-size: 14px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
+        textarea { resize: vertical; height: 70px; }
+        .btn { padding: 12px 20px; background: #0284c7; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
+        .btn:hover { background: #0369a1; }
+        .links { text-align: center; margin-top: 15px; font-size: 14px; }
+        .links a { color: #0284c7; text-decoration: none; font-weight: bold; }
+        .back-link { display: inline-block; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px; }
+        
+        #dashboardSection { display: none; }
+        
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
+        .product-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; }
+        .product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 6px; margin-bottom: 12px; background: #e2e8f0; }
+        .product-title { font-size: 18px; font-weight: bold; color: #1e293b; margin-bottom: 8px; }
+        .product-price { color: #16a34a; font-weight: bold; font-size: 16px; margin-bottom: 8px; }
+        .product-info { font-size: 13px; color: #64748b; margin-bottom: 5px; }
+        .card-actions { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-edit { background: #ca8a04; flex: 1; padding: 8px; font-size: 14px; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: center; }
+        .btn-edit:hover { background: #a16207; }
+        .btn-delete { background: #dc2626; flex: 1; padding: 8px; font-size: 14px; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; text-align: center; }
+        .btn-delete:hover { background: #b91c1c; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. شاشة تسجيل الدخول -->
+        <div id="loginSection" style="max-width: 500px; margin: 0 auto;">
+            <h2>🔐 دخول البائع لعرض سلعه</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 20px; font-size: 14px;">أدخل بيانات حسابك لإدارة وعرض سلعك للبيع</p>
+            
+            <div class="form-group">
+                <label>اسم المستخدم:</label>
+                <input type="text" id="loginUser" placeholder="أدخل اسم المستخدم...">
+            </div>
+
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="loginPass" placeholder="أدخل كلمة المرور...">
+            </div>
+
+            <button class="btn" style="width: 100%;" onclick="checkSellerLogin()">دخول لوحة المبيعات</button>
+
+            <div class="links">
+                <span style="color: #64748b;">ليس لديك حساب؟</span>
+                <a href="register.html">انشاء حساب جديد</a>
+            </div>
+            <div style="text-align: center;">
+                <a href="index.html" class="back-link">← العودة للرئيسية</a>
+            </div>
+        </div>
+
+        <!-- 2. لوحة التحكم والصفحة الكاملة للسلع -->
+        <div id="dashboardSection">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
+                <h2 id="welcomeTitle" style="margin: 0;">📦 مبيعاتي وسلعي المعروضة</h2>
+                <div>
+                    <button class="btn" style="background: #16a34a; font-size: 14px; padding: 10px 15px;" onclick="openAddForm()">➕ إضافة سلعة جديدة</button>
+                    <button class="btn" style="background: #dc2626; font-size: 14px; padding: 10px 15px; margin-right: 5px;" onclick="location.reload()">تسجيل الخروج</button>
+                </div>
+            </div>
+
+            <!-- نموذج إضافة أو تعديل سلعة -->
+            <div id="addProductFormContainer" style="display: none; background: #f8fafc; padding: 25px; border-radius: 10px; border: 1px solid #cbd5e1; margin-bottom: 25px;">
+                <h3 id="formModeTitle" style="margin-bottom: 15px; font-size: 18px; color: #1e293b;">إضافة سلعة جديدة لحسابك</h3>
+                
+                <input type="hidden" id="editIndex" value="-1">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>اسم السلعة (العنوان):</label>
+                        <input type="text" id="newTitle" placeholder="مثال: خاتم فضة، بدلة...">
+                    </div>
+                    <div class="form-group">
+                        <label>تصنيف السلعة (القسم):</label>
+                        <select id="newCategory">
+                            <option value="ملابس رجالي">👔 ملابس رجالي</option>
+                            <option value="ملابس نسائي">👗 ملابس نسائي</option>
+                            <option value="ملابس ولادي">🧒 ملابس ولادي</option>
+                            <option value="الفضيات">💍 الفضيات</option>
+                            <option value="المكتبيات">📚 المكتبيات</option>
+                            <option value="المواد الغذائية">🛒 المواد الغذائية</option>
+                            <option value="إلكترونيات وجوالات">📱 إلكترونيات وجوالات</option>
+                            <option value="عقارات">📦 أخرى</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>السعر (الرقم فقط):</label>
+                        <input type="text" id="newPrice" placeholder="مثال: 15000">
+                    </div>
+                    <div class="form-group">
+                        <label>العملة:</label>
+                        <select id="newCurrency">
+                            <option value="ريال يمني">ريال يمني</option>
+                            <option value="ريال سعودي">ريال سعودي</option>
+                            <option value="دولار أمريكي">دولار أمريكي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>الدولة:</label>
+                        <select id="newCountry">
+                            <option value="اليمن">اليمن</option>
+                            <option value="المملكة العربية السعودية">المملكة العربية السعودية</option>
+                            <option value="الإمارات العربية المتحدة">الإمارات العربية المتحدة</option>
+                            <option value="مصر">مصر</option>
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المحافظة / المنطقة:</label>
+                        <input type="text" id="newCity" placeholder="مثال: صنعاء، تعز...">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>حالة السلعة:</label>
+                        <select id="newCondition">
+                            <option value="جديد (لم يُستخدام)">جديد (لم يُستخدام)</option>
+                            <option value="مستعمل بحالة ممتازة">مستعمل بحالة ممتازة</option>
+                            <option value="مستعمل متوسط">مستعمل متوسط</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>صورة السلعة:</label>
+                        <input type="file" id="newImage" accept="image/*" style="padding: 8px;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>مميزات السلعة:</label>
+                    <textarea id="newFeatures" placeholder="اكتب مميزات السلعة..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" style="background: #16a34a; flex: 2;" onclick="saveOrUpdateProduct()">حفظ ونشر السلعة</button>
+                    <button class="btn" style="background: #64748b; flex: 1;" onclick="toggleAddProductForm(false)">إلغاء</button>
+                </div>
+            </div>
+
+            <!-- شبكة عرض السلع الخاصة بالبائع -->
+            <div id="productsList" class="products-grid">
+                <!-- سيتم عرض السلع هنا بشكل مرتب -->
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="index.html" class="back-link">← العودة للصفحة الرئيسية للمنصة</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLoggedInUser = "";
+
+        function checkSellerLogin() {
+            var user = document.getElementById('loginUser').value.trim();
+            var pass = document.getElementById('loginPass').value.trim();
+
+            if (!user || !pass) {
+                alert('الرجاء إدخال اسم المستخدم وكلمة المرور!');
+                return;
+            }
+
+            currentLoggedInUser = user;
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('dashboardSection').style.display = 'block';
+            document.getElementById('welcomeTitle').innerText = '📦 لوحة تحكم البائع: ' + user;
+            loadSellerProducts(user);
+        }
+
+        function toggleAddProductForm(show) {
+            var form = document.getElementById('addProductFormContainer');
+            if (show === undefined) {
+                form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            } else {
+                form.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        function openAddForm() {
+            document.getElementById('formModeTitle').innerText = 'إضافة سلعة جديدة لحسابك';
+            document.getElementById('editIndex').value = '-1';
+            document.getElementById('newTitle').value = '';
+            document.getElementById('newPrice').value = '';
+            document.getElementById('newCity').value = '';
+            document.getElementById('newFeatures').value = '';
+            document.getElementById('newImage').value = '';
+            toggleAddProductForm(true);
+        }
+
+        function saveOrUpdateProduct() {
+            var title = document.getElementById('newTitle').value.trim();
+            var category = document.getElementById('newCategory').value;
+            var priceInput = document.getElementById('newPrice').value.trim();
+            var currency = document.getElementById('newCurrency').value;
+            var country = document.getElementById('newCountry').value;
+            var city = document.getElementById('newCity').value.trim();
+            var condition = document.getElementById('newCondition').value;
+            var features = document.getElementById('newFeatures').value.trim();
+            var fileInput = document.getElementById('newImage');
+            var editIndex = parseInt(document.getElementById('editIndex').value);
+
+            if (!title || !priceInput) {
+                alert('الرجاء إدخال اسم السلعة والسعر على الأقل!');
+                return;
+            }
+
+            var allProducts = JSON.parse(localStorage.getItem('platformProducts')) || [];
+
+            function persistData(imageSrc) {
+                var productObj = {
+                    title: title,
+                    category: category,
+                    price: priceInput + ' ' + currency,
+                    country: country,
+                    city: city,
+                    condition: condition,
+                    features: features,
+                    image: imageSrc,
+                    seller: currentLoggedInUser
+                };
+
+                if (editIndex > -1) {
+                    // إذا كان تعديل، نحافظ على الصورة القديمة إذا لم يتم اختيار صورة جديدة
+                    if (!imageSrc && allProducts[editIndex]) {
+                        productObj.image = allProducts[editIndex].image;
+                    }
+                    allProducts[editIndex] = productObj;
+                    alert('تم تعديل وتحديث السلعة بنجاح!');
+                } else {
+                    allProducts.push(productObj);
+                    alert('تم إضافة ونشر السلعة بنجاح!');
+                }
+
+                localStorage.setItem('platformProducts', JSON.stringify(allProducts));
+                toggleAddProductForm(false);
+                loadSellerProducts(currentLoggedInUser);
+            }
+
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    persistData(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                persistData('');
+            }
+        }
+
+        function loadSellerProducts(username) {
+            var container = document.getElementById('productsList');
+            var allProducts = JSON.parse(localStorage.getItem('platformProducts')) || [];
+            
+            var html = '';
+            var found = false;
+
+            for (var i = 0; i < allProducts.length; i++) {
+                if (allProducts[i].seller && allProducts[i].seller.toLowerCase() === username.toLowerCase()) {
+                    found = true;
+                    var imgTag = allProducts[i].image ? '<img src="' + allProducts[i].image + '" alt="سلعة">' : '<div style="width:100%; height:160px; background:#e2e8f0; display:flex; align-items:center; justify-content:center; color:#64748b; border-radius:6px; margin-bottom:12px;">بدون صورة</div>';
+                   
+                    html += '<div class="product-card">';
+                    html += '<div>';
+                    html += imgTag;
+                    html += '<div class="product-title">' + allProducts[i].title + '</div>';
+                    html += '<div class="product-price">السعر: ' + allProducts[i].price + '</div>';
+                    if(allProducts[i].category) html += '<div class="product-info">🏷 التصنيف: ' + allProducts[i].category + '</div>';
+                    if(allProducts[i].city) html += '<div class="product-info">📍 الموقع: ' + allProducts[i].country + ' - ' + allProducts[i].city + '</div>';
+                    if(allProducts[i].condition) html += '<div class="product-info">⚙️ الحالة: ' + allProducts[i].condition + '</div>';
+                    if(allProducts[i].features) html += '<div class="product-info">✨ المميزات: ' + allProducts[i].features + '</div>';
+                    html += '</div>';
+                    
+                    // أزرار التعديل والحذف لكل سلعة مع تمرير مؤشرها الحقيقي في المصفوفة العامة
+                    html += '<div class="card-actions">';
+                    html += '<button class="btn-edit" onclick="editProduct(' + i + ')">✏️ تعديل</button>';
+                    html += '<button class="btn-delete" onclick="deleteProduct(' + i + ')">🗑 حذف</button>';
+                    html += '</div>';
+
+                    html += '</div>';
+                }
+            }
+
+            if (!found) {
+                container.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 40px; font-size: 16px;">ليس لديك أي سلع معروضة حالياً. اضغط على زر "إضافة سلعة جديدة" بالأعلى لنشر أول سلعة في حسابك.</p>';
+            } else {
+                container.innerHTML = html;
+            }
+        }
+
+        function editProduct(index) {
+            var allProducts = JSON.parse(localStorage.getItem('platformProducts')) || [];
+            var p = allProducts[index];
+            if (!p) return;
+
+            // تعبئة الحقول بالبيانات القديمة
+            document.getElementById('formModeTitle').innerText = 'تعديل السلعة: ' + p.title;
+            document.getElementById('editIndex').value = index;
+            document.getElementById('newTitle').value = p.title || '';
+            document.getElementById('newCategory').value = p.category || '';
+            
+            // استخراج الرقم فقط من السعر (مثال: فصل العملة عن الرقم)
+            var priceParts = (p.price || '').split(' ');
+            document.getElementById('newPrice').value = priceParts[0] || '';
+            if(priceParts[1]) document.getElementById('newCurrency').value = priceParts[1];
+
+            document.getElementById('newCountry').value = p.country || 'اليمن';
+            document.getElementById('newCity').value = p.city || '';
+            document.getElementById('newCondition').value = p.condition || '';
+            document.getElementById('newFeatures').value = p.features || '';
+            document.getElementById('newImage').value = ''; // إعادة تعيين ملف الصورة
+
+            toggleAddProductForm(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteProduct(index) {
+            if (confirm('هل أنت متأكد من حذف هذه السلعة نهائياً من المنصة؟')) {
+                var allProducts = JSON.parse(localStorage.getItem('platformProducts')) || [];
+                allProducts.splice(index, 1);
+                localStorage.setItem('platformProducts', JSON.stringify(allProducts));
+                loadSellerProducts(currentLoggedInUser);
+            }
+        }
+    </script>
+</body>
+</html>
