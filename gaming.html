@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة وجهتك - شحن الألعاب وتطبيقات البث المباشر</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body {
+            background-color: #cbd5e1 !important;
+            color: #1e213b;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+       
+        header {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+       
+        .logo-img { height: 50px; width: auto; object-fit: contain; border-radius: 6px; background: #fff; padding: 3px; }
+       
+        .nav-links { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; padding: 8px 12px; border-radius: 5px; font-size: 13px; background: #334155; transition: background 0.2s; }
+        .nav-links a:hover { background: #475569; }
+        .nav-links .home-btn { background: #0284c7; }
+
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 15px; }
+       
+        .hero-section { text-align: center; margin-bottom: 30px; }
+        .hero-section h1 { color: #1e293b; font-size: 28px; margin-bottom: 8px; }
+        .hero-section p { color: #64748b; font-size: 15px; }
+
+        .section-title { color: #1e293b; font-size: 20px; margin: 30px 0 15px 0; border-right: 4px solid #0284c7; padding-right: 10px; }
+
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+       
+        .game-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; text-align: center; transition: transform 0.2s; }
+        .game-card:hover { transform: translateY(-3px); }
+       
+        .game-img { width: 100%; height: 160px; object-fit: cover; background: #f1f5f9; }
+
+        .game-title { padding: 12px 15px 5px 15px; font-weight: bold; color: #1e293b; font-size: 18px; }
+        .game-desc { color: #64748b; font-size: 13px; padding: 0 15px 15px 15px; }
+       
+        .card-footer { padding: 12px 15px; background: #f8fafc; border-top: 1px solid #e2e8f0; }
+        .charge-btn { width: 100%; background: #7c3aed; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px; transition: background 0.2s; }
+        .charge-btn:hover { background: #6d28d9; }
+
+        .live-btn { background: #e11d48 !important; }
+        .live-btn:hover { background: #be123c !important; }
+
+        /* نافذة الطلب */
+        #orderModal { display: none; position: fixed; z-index: 10000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .modal-header-bar { background: #1e293b; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .close-modal { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; text-align: right; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: bold; color: #334155; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+        .submit-order-btn { width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; }
+        .submit-order-btn:hover { background: #15803d; }
+    </style>
+</head>
+<body>
+
+<!-- شريط التنبيهات -->
+<div style="background: #be185d; color: #ffffff; padding: 10px 0; overflow: hidden; white-space: nowrap; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);">
+    <marquee behavior="scroll" direction="right" scrollamount="5" style="font-size: 15px; font-weight: bold;">
+        ⚡️ شحن فوري وآمن لجميع الألعاب وتطبيقات البث المباشر (تيك توك، بيغو، وغيرها) | 🛡 ضمان كامل للعملية عبر منصة وجهتك.
+    </marquee>
+</div>
+
+<!-- رأس الصفحة -->
+<header>
+    <a href="index.html">
+        <img src="logo.jpg" alt="منصة وجهتك" class="logo-img">
+    </a>
+    <div class="nav-links">
+        <a href="index.html" class="home-btn">🏠 الرئيسية</a>
+        <a href="checkout-escrow.html">🛡 الوساطة المالية</a>
+        <a href="contact.html">📞 تواصل معنا</a>
+    </div>
+</header>
+
+<!-- المحتوى الرئيسي -->
+<div class="container">
+    <div class="hero-section">
+        <h1>قسم الشحن الرقمي والبث المباشر</h1>
+        <p>شحن فوري ومضمون لعملات تطبيقات البث المباشر والألعاب والبطاقات الرقمية</p>
+    </div>
+
+    <!-- قسم تطبيقات البث المباشر -->
+    <h2 class="section-title">🎥 عملات تطبيقات البث المباشر</h2>
+    <div class="games-grid">
+        
+        <!-- تيك توك -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?w=500&auto=format&fit=crop&q=60" alt="TikTok Coins" class="game-img">
+            <div class="game-title">عملات تيك توك (TikTok Coins)</div>
+            <div class="game-desc">شحن رسمي لعملات تيك توك عبر الـ ID وبأفضل الأسعار.</div>
+            <div class="card-footer">
+                <button class="charge-btn live-btn" onclick="openOrderModal('عملات تيك توك')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- بيغو لايف -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500&auto=format&fit=crop&q=60" alt="Bigo Live" class="game-img">
+            <div class="game-title">جواهر بيغو لايف (Bigo Live)</div>
+            <div class="game-desc">شحن ماسات وجواهر بيغو لايف الحسابات والبثوث.</div>
+            <div class="card-footer">
+                <button class="charge-btn live-btn" onclick="openOrderModal('جواهر بيغو لايف')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- لايكي -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&auto=format&fit=crop&q=60" alt="Likee" class="game-img">
+            <div class="game-title">ماس / عملات لايكي (Likee)</div>
+            <div class="game-desc">شحن سريع وآمن لحسابات تطبيق لايكي.</div>
+            <div class="card-footer">
+                <button class="charge-btn live-btn" onclick="openOrderModal('عملات لايكي')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- لايف كويك أو إيمو -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=500&auto=format&fit=crop&q=60" alt="Live Streaming" class="game-img">
+            <div class="game-title">عملات تطبيق إيمو (Imo) / أخرى</div>
+            <div class="game-desc">شحن رصيد وعملات لمختلف برامج التواصل والدردشة.</div>
+            <div class="card-footer">
+                <button class="charge-btn live-btn" onclick="openOrderModal('عملات تطبيق إيمو أو برامج أخرى')">طلب شحن</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- قسم الألعاب والبطاقات -->
+    <h2 class="section-title">🎮 شحن الألعاب والبطاقات الرقمية</h2>
+    <div class="games-grid">
+        
+        <!-- لعبة 1 -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&auto=format&fit=crop&q=60" alt="PUBG Mobile" class="game-img">
+            <div class="game-title">شدات ببجي موبايل (PUBG)</div>
+            <div class="game-desc">شحن رسمي ومضمون بالـ ID مباشرة وبأفضل الأسعار.</div>
+            <div class="card-footer">
+                <button class="charge-btn" onclick="openOrderModal('شدات ببجي موبايل')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- لعبة 2 -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500&auto=format&fit=crop&q=60" alt="Free Fire" class="game-img">
+            <div class="game-title">جواهر فري فاير (Free Fire)</div>
+            <div class="game-desc">شحن جواهر سريع وآمن عن طريق الـ ID.</div>
+            <div class="card-footer">
+                <button class="charge-btn" onclick="openOrderModal('جواهر فري فاير')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- بطاقة 3 -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&auto=format&fit=crop&q=60" alt="Google Play" class="game-img">
+            <div class="game-title">بطاقات جوجل بلاي (Google Play)</div>
+            <div class="game-desc">متوفر فئات مختلفة (أمريكي، سعودي، وغيرها).</div>
+            <div class="card-footer">
+                <button class="charge-btn" onclick="openOrderModal('بطاقات جوجل بلاي')">طلب شحن</button>
+            </div>
+        </div>
+
+        <!-- بطاقة 4 -->
+        <div class="game-card">
+            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=60" alt="Apple iTunes" class="game-img">
+            <div class="game-title">بطاقات آيتونز (Apple iTunes)</div>
+            <div class="game-desc">بطاقات أبل ستور لمختلف المتاجر العالمية.</div>
+            <div class="card-footer">
+                <button class="charge-btn" onclick="openOrderModal('بطاقات آيتونز')">طلب شحن</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- نافذة إتمام الطلب -->
+<div id="orderModal">
+    <div class="modal-content">
+        <div class="modal-header-bar">
+            <h3 id="modalGameTitle" style="font-size: 16px; margin: 0;">طلب شحن</h3>
+            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="gameOrderForm" onsubmit="submitGameOrder(event)">
+                <div class="form-group">
+                    <label>الخدمة المختارة:</label>
+                    <input type="text" id="selectedService" readonly style="background: #f1f5f9; font-weight: bold;">
+                </div>
+                <div class="form-group">
+                    <label>اختر الباقة / الفئة:</label>
+                    <select id="packageCategory" required>
+                        <option value="">-- اختر الباقة المطلوبة --</option>
+                        <option value="باقة صغيرة">باقة صغيرة / اقتصادية</option>
+                        <option value="باقة متوسطة">باقة متوسطة</option>
+                        <option value="باقة كبيرة">باقة كبيرة / مميزة</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>الـ ID أو اسم الحساب المراد الشحن له:</label>
+                    <input type="text" id="accountId" placeholder="أدخل رقم الـ ID أو اسم المستخدم..." required>
+                </div>
+                <div class="form-group">
+                    <label>رقم الهاتف للتواصل (واتساب):</label>
+                    <input type="tel" id="clientPhone" placeholder="مثال: 732xxxxxx" required>
+                </div>
+                <button type="submit" class="submit-order-btn">إرسال الطلب عبر الواتساب</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function openOrderModal(serviceName) {
+        document.getElementById('selectedService').value = serviceName;
+        document.getElementById('modalGameTitle').textContent = 'طلب شحن: ' + serviceName;
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderModal() {
+        document.getElementById('orderModal').style.display = 'none';
+    }
+
+    function submitGameOrder(e) {
+        e.preventDefault();
+        var service = document.getElementById('selectedService').value;
+        var pkg = document.getElementById('packageCategory').value;
+        var accId = document.getElementById('accountId').value;
+        var phone = document.getElementById('clientPhone').value;
+
+        var message = "السلام عليكم، أريد طلب شحن:\n" +
+                      "⚡️ الخدمة: " + service + "\n" +
+                      "📦 الباقة: " + pkg + "\n" +
+                      "🆔 الـ ID / الحساب: " + accId + "\n" +
+                      "📱 رقم العميل: " + phone;
+
+        var encodedMessage = encodeURIComponent(message);
+        var whatsappUrl = "https://wa.me/+96773211443?text=" + encodedMessage;
+
+        window.open(whatsappUrl, '_blank');
+        closeOrderModal();
+    }
+</script>
+
+</body>
+</html>

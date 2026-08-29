@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة التوثيق والأمان السيبراني - منصة وجهتك</title>
+    <style>
+        :root { --primary: #0284c7; --primary-dark: #0369a1; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; --card-bg: #ffffff; --text: #334155; --border: #cbd5e1; }
+        body { font-family: Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text); }
+        .container { max-width: 850px; margin: 30px auto; background: var(--card-bg); padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+        h1, h2, h3 { color: #0f172a; text-align: center; }
+        .security-badge { background: #e0f2fe; color: #0369a1; padding: 10px; border-radius: 6px; text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 25px; border: 1px solid #bae6fd; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; font-size: 14px; color: #1e293b; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
+        input[type="file"] { padding: 8px; background: #f8fafc; cursor: pointer; }
+        textarea { resize: vertical; height: 90px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
+        button { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 15px; transition: 0.2s; }
+        button:hover { background: var(--primary-dark); }
+        .card { background: #f8fafc; padding: 25px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 25px; }
+        .product-item { background: #fff; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .delete-btn { background: var(--danger); width: auto; padding: 6px 14px; font-size: 13px; }
+        .delete-btn:hover { background: #b91c1c; }
+        .toggle-box { text-align: center; margin-top: 15px; font-size: 14px; color: #64748b; }
+        .toggle-box a { color: var(--primary); text-decoration: none; font-weight: bold; cursor: pointer; }
+        .toggle-box a:hover { text-decoration: underline; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; font-size: 14px; }
+        .user-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 13px; background: #fff; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; }
+        
+        .storefront-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 15px; }
+        .store-product-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .store-product-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 6px; margin-bottom: 8px; background: #f1f5f9; }
+        .store-product-card h4 { margin: 5px 0; color: #0f172a; font-size: 15px; }
+        .store-product-card .price { color: var(--success); font-weight: bold; font-size: 14px; margin-bottom: 8px; }
+        .select-product-btn { background: var(--success); padding: 8px; font-size: 13px; width: 100%; margin-top: 5px; }
+        .select-product-btn:hover { background: #15803d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <a href="index.html" class="back-link">← العودة إلى الصفحة الرئيسية للمنصة</a>
+    
+    <div class="security-badge">
+        🛡 بوابة التوثيق والتحقق الأمني الشامل - منصة وجهتك للوساطه الماليه 
+    </div>
+    <!-- قسم عرض صفحة البائع العامة للمشترين -->
+    <div id="publicStoreSection" style="display: none;">
+        <div class="card" style="background: #f0fdf4; border-color: #bbf7d0; text-align: center;">
+            <h2 id="publicStoreName" style="color: #166534; margin-bottom: 5px;"></h2>
+            <p id="publicStoreLocation" style="color: #64748b; font-size: 13px; margin-top: 0;"></p>
+            <span style="background: #dcfce7; color: #15803d; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">متجر موثق رسمياً ✓</span>
+        </div>
+        <h3 style="color: #0f172a; text-align: right;">📦 كافة السلع المعروضة من هذا البائع</h3>
+        <div id="publicProductsGrid" class="storefront-grid"></div>
+    </div>
+
+    <!-- 1. نموذج تسجيل وتوثيق حساب بائع جديد -->
+    <div id="registerSection">
+        <div style="max-width: 500px; margin: 0 auto;">
+            <h2>📝 توثيق حساب بائع جديد</h2>
+            <p style="text-align: center; color: #64748b; font-size: 13px; margin-bottom: 25px;">يُرجى إدخال بيانات التوثيق الجغرافي ورفع صورة الهوية لضمان أمان المعاملات</p>
+            
+            <div class="form-group">
+                <label>الاسم التجاري أو اسم البائع:</label>
+                <input type="text" id="regName" placeholder="مثال: متجر الأمل للتقنية / ماجد الشماع">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف المعتمد (للوساطة المالية):</label>
+                <input type="text" id="regPhone" placeholder="مثال: 77xxxxxxxx">
+            </div>
+            
+            <div class="form-group">
+                <label>الدولة:</label>
+                <select id="regCountry">
+                    <option value="اليمن">اليمن</option>
+                    <option value="المملكة العربية السعودية">المملكة العربية السعودية</option>
+                    <option value="سلطنة عمان">سلطنة عمان</option>
+                    <option value="مصر">مصر</option>
+                    <option value="أخرى">دولة أخرى</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>المحافظة / المدينة / المنطقة:</label>
+                <input type="text" id="regRegion" placeholder="مثال: صنعاء، عمران، تعز، إب، عدن...">
+            </div>
+
+            <div class="form-group">
+                <label>تحميل صورة الهوية الشخصية / البطاقة:</label>
+                <input type="file" id="regIdFile" accept="image/*">
+            </div>
+
+            <div class="form-group">
+                <label>كلمة المرور المشفرة:</label>
+                <input type="password" id="regPass" placeholder="أدخل كلمة مرور قوية">
+            </div>
+
+            <div class="form-group">
+                <label>تأكيد كلمة المرور:</label>
+                <input type="password" id="regPassConfirm" placeholder="أعد إدخال كلمة المرور">
+            </div>
+
+            <button onclick="registerVendor()">إرسال طلب التوثيق وإنشاء الحساب</button>
+
+            <div class="toggle-box">
+                لديك حساب موثق مسبقاً؟ <a onclick="switchAuthMode('login')">تسجيل الدخول الآمن</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. نموذج تسجيل الدخول الأمني -->
+    <div id="loginSection" style="display: none;">
+        <div style="max-width: 480px; margin: 0 auto;">
+            <h2>🔐 تسجيل الدخول إلى لوحة البائع</h2>
+            <p style="text-align: center; color: #64748b; font-size: 13px; margin-bottom: 25px;">أدخل بيانات الاعتماد الخاصة بك للوصول إلى بيئتك التجارية</p>
+
+            <div class="form-group">
+                <label>رقم الهاتف أو الاسم التجاري:</label>
+                <input type="text" id="logPhone" placeholder="أدخل رقم الهاتف أو اسم البائع">
+            </div>
+            <div class="form-group">
+                <label>كلمة المرور:</label>
+                <input type="password" id="logPass" placeholder="••••••••">
+            </div>
+            <button onclick="loginVendor()">دخول آمن إلى الحساب</button>
+            <div class="toggle-box">
+                ليس لديك حساب تجاري؟ <a onclick="switchAuthMode('register')">سجل حساباً جديداً الآن</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. لوحة تحكم الملف الشخصي للبائع الموثق -->
+    <div id="profileSection" style="display: none;">
+        <div class="card" style="background: #f0fdf4; border-color: #bbf7d0;">
+            <h2>مرحباً بك، <span id="displayName" style="color: var(--success);"></span> 🛡</h2>
+            <p style="text-align: center; color: #166534; font-size: 13px; margin-bottom: 15px;">حسابك موثق جغرافياً وبرمجياً وجاهز لإدارة المنتجات وإتمام الصفقات.</p>
+            
+            <div class="user-meta">
+                <div><strong>رقم الهاتف:</strong> <span id="displayPhone"></span></div>
+                <div><strong>الموقع الجغرافي:</strong> <span id="displayLocation"></span></div>
+                <div><strong>حالة التوثيق:</strong> <span style="color: var(--success); font-weight: bold;">معتمد وموثق بالهوية ✓</span></div>
+                <div><strong>إثبات الهوية:</strong> <span id="displayIdStatus" style="color: var(--primary); font-weight: bold;">تم رفع الملف بنجاح</span></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                <button onclick="viewMyPublicStore()" style="background: var(--success); width: auto; padding: 8px 20px; font-size: 13px;">عرض صفحة متجري العامة للزوار</button>
+                <button onclick="logoutVendor()" style="background: #64748b; width: auto; padding: 8px 20px; font-size: 13px;">إنهاء الجلسة (تسجيل خروج)</button>
+            </div>
+        </div>
+
+        <!-- إضافة سلعة جديدة بكامل التفاصيل -->
+        <div class="card">
+            <h3 style="margin-top: 0; color: #0f172a; text-align: right;">➕ نشر منتج أو خدمة جديدة للبيع</h3>
+            
+            <div class="form-group">
+                <label>اسم السلعة / الخدمة:</label>
+                <input type="text" id="pName" placeholder="مثال: هاتف ذكي...">
+            </div>
+
+            <div class="form-group">
+                <label>السعر والعملة:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="pPrice" placeholder="مثال: 5000" style="flex: 2;">
+                    <select id="pCurrency" style="flex: 1;">
+                        <option value="ر.ي">ريال يمني (ر.ي)</option>
+                        <option value="ر.س">ريال سعودي (ر.س)</option>
+                        <option value="$">دولار أمريكي ($)</option>
+                        <option value="ر.ع">ريال عماني (ر.ع)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>القسم التجاري:</label>
+                <select id="pCategory">
+                    <option value="سيارات">سيارات بانواعها</option>
+                    <option value="إلكترونيات وجوالات">إلكترونيات وجوالات</option>
+                    <option value="الحسابات والألعاب">الحسابات والألعاب</option>
+                    <option value="ملابس نسائي">ملابس نسائي</option>
+                    <option value="ملابس رجالي">ملابس رجالي</option>
+                    <option value="المواد الغذائية">المواد الغذائية</option>
+                    <option value="ملابس ولادي">ملابس ولادي</option>
+                    <option value="DXN منجات">منتجات DXN</option>
+                    <option value="منتجات محليه">منتجات محليه</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>حالة السلعة:</label>
+                <select id="pCondition">
+                    <option value="جديد">جديد</option>
+                    <option value="مستعمل">مستعمل</option>
+                    </select>
+            </div>
+            
+            <div class="form-group">
+                <label>الكمية المتوفرة:</label>
+                <input type="text" id="pQuantity" placeholder="الكمية المتوفرة...">
+            </div>
+            <div class="form-group">
+                <label>وصف السلعة / التفاصيل:</label>
+                <textarea id="pDesc" placeholder="اكتب تفاصيل إضافية عن السلعة (المصدر، الجودة، المواصفات)..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>تحميل صورة السلعة:</label>
+                <input type="file" id="pImagesFiles" accept="image/*">
+            </div>
+
+            <button type="button" id="publishBtn">نشر السلعة في المنصة الرئيسية</button>
+        </div>
+
+        <h3 style="color: #0f172a; text-align: right;">📦 قائمة سلعك وخدماتك المعروضة</h3>
+        <div id="myProductsList"></div>
+    </div>
+</div>
+
+<script type="module">
+    import { supabase } from './supabase.js';
+    window.supabase = supabase;
+
+    let editingProductId = null; // متغير لتتبع ما إذا كنا نقوم بتعديل سلعة حالية
+
+    window.onload = async function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var targetSeller = urlParams.get('seller');
+
+        if (targetSeller) {
+            loadPublicStorefront(targetSeller);
+        } else {
+            var activeVendor = localStorage.getItem('currentVendor');
+            if (activeVendor) {
+                showVendorProfile(JSON.parse(activeVendor));
+            }
+        }
+    };
+
+    window.switchAuthMode = function(mode) {
+        if (mode === 'login') {
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+        } else {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+        }
+    }
+    document.getElementById('publishBtn').addEventListener('click', async function() {
+    if (typeof window.addOrUpdateProduct === 'function') {
+        await window.addOrUpdateProduct();
+    } else {
+        console.error("الدالة غير محملة بعد");
+    }
+});
+
+    window.registerVendor = function() {
+        var name = document.getElementById('regName').value.trim();
+        var phone = document.getElementById('regPhone').value.trim();
+        var country = document.getElementById('regCountry').value;
+        var region = document.getElementById('regRegion').value.trim();
+        var fileInput = document.getElementById('regIdFile');
+        var pass = document.getElementById('regPass').value.trim();
+        var passConfirm = document.getElementById('regPassConfirm').value.trim();
+
+        if (!name || !phone || !region || pass.length === 0 || passConfirm.length === 0) {
+            alert('خطأ أمني: جميع حقول التوثيق الجغرافي وبيانات الحساب إجبارية!');
+            return;
+        }
+
+        if (fileInput.files.length === 0) {
+            alert('يجب رفع صورة الهوية الشخصية أو البطاقة لتوثيق الحساب أمنياً!');
+            return;
+        }
+
+        // التحقق الأمني التلقائي من أن الملف المرفوع صورة حقيقية وليس ملفاً ضاراً
+        var idFile = fileInput.files[0];
+        if (!idFile.type.startsWith('image/')) {
+            alert('خطأ أمني: الملف المرفوع ليس صورة صالحة للبطاقة الشخصية! يرجى رفع صورة بصيغة JPG أو PNG.');
+            return;
+        }
+
+        if (pass !== passConfirm) {
+            alert('خطأ في المطابقة: كلمتا المرور غير متطابقتين!');
+            return;
+        }
+
+        var vendors = JSON.parse(localStorage.getItem('platformVendors')) || [];
+        var exists = vendors.some(function(v) { return v.phone === phone; });
+        if (exists) {
+            alert('رقم الهاتف هذا مسجل مسبقاً بحساب آخر! يرجى تسجيل الدخول.');
+            switchAuthMode('login');
+            return;
+        }
+
+        var newVendor = {
+            name: name,
+            phone: phone,
+            country: country,
+            region: region,
+            idFileName: idFile.name,
+            pass: pass
+        };
+
+        vendors.push(newVendor);
+        localStorage.setItem('platformVendors', JSON.stringify(vendors));
+        localStorage.setItem('currentVendor', JSON.stringify(newVendor));
+
+        alert('تم رفع الهوية وتوثيق الحساب الجغرافي بنجاح!');
+        showVendorProfile(newVendor);
+    }
+
+    window.loginVendor = function() {
+        var phoneInput = document.getElementById('logPhone').value.trim();
+        var passInput = document.getElementById('logPass').value.trim();
+        if (!phoneInput || !passInput) {
+            alert('يرجى إدخال بيانات الاعتماد وكلمة المرور!');
+            return;
+        }
+        var vendors = JSON.parse(localStorage.getItem('platformVendors')) || [];
+        var found = vendors.find(function(v) {
+            return (v.phone === phoneInput || v.name === phoneInput) && v.pass === passInput;
+        });
+        if (found) {
+            localStorage.setItem('currentVendor', JSON.stringify(found));
+            showVendorProfile(found);
+        } else {
+            alert('فشل المصادقة: بيانات الدخول غير صحيحة أو الحساب غير موثق!');
+        }
+    }
+
+    window.showVendorProfile = function(vendor) {
+        document.getElementById('registerSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('publicStoreSection').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'block';
+        
+        document.getElementById('displayName').innerText = vendor.name;
+        document.getElementById('displayPhone').innerText = vendor.phone;
+        document.getElementById('displayLocation').innerText = vendor.country + ' - ' + vendor.region;
+        document.getElementById('displayIdStatus').innerText = 'تم رفع (' + vendor.idFileName + ') بنجاح';
+
+        loadVendorProducts();
+    }
+
+    window.logoutVendor = function() {
+        localStorage.removeItem('currentVendor');
+        document.getElementById('profileSection').style.display = 'none';
+        document.getElementById('registerSection').style.display = 'block';
+    }
+
+    window.viewMyPublicStore = function() {
+        var activeVendor = JSON.parse(localStorage.getItem('currentVendor'));
+        if (activeVendor) {
+            window.location.href = 'profile.html?seller=' + encodeURIComponent(activeVendor.name);
+        }
+    }
+
+    window.loadPublicStorefront = async function(sellerName) {
+        document.getElementById('registerSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('profileSection').style.display = 'none';
+        document.getElementById('publicStoreSection').style.display = 'block';
+
+        var { data: sellerProducts, error } = await supabase
+            .from('products')
+            .select('*')
+            
+
+        if (error) {
+            console.error('خطأ في جلب السلع:', error);
+            sellerProducts = [];
+        }
+
+        document.getElementById('publicStoreName').innerText = 'متجر: ' + sellerName;
+        
+        if (sellerProducts && sellerProducts.length > 0) {
+            document.getElementById('publicStoreLocation').innerText = 'الموقع الجغرافي: متجر معتمد في المنصة';
+        } else {
+            document.getElementById('publicStoreLocation').innerText = 'المتجر العام للوساطة التجارية';
+        }
+
+        var gridContainer = document.getElementById('publicProductsGrid');
+        gridContainer.innerHTML = '';
+
+        if (!sellerProducts || sellerProducts.length === 0) {
+            gridContainer.innerHTML = '<p style="color: #64748b; grid-column: 1 / -1; text-align: center; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0;">لا توجد سلع معروضة حالياً في هذا المتجر.</p>';
+            return;
+        }
+
+        sellerProducts.forEach(function(product) {
+            var card = document.createElement('div');
+            card.className = 'store-product-card';
+            
+            var imgSrc = product.image ? product.image : 'https://via.placeholder.com/200x130?text=بدون+صورة';
+            
+            card.innerHTML = 
+                '<img src="' + imgSrc + '" alt="' + product.title + '">' +
+                '<h4 class="product-name">' + product.title + '</h4>' +
+                '<div class="price">' + product.price + '</div>' +
+                '<p style="font-size: 11px; color: #64748b; margin: 4px 0;">التصنيف: ' + product.category + '</p>' +
+                '<button class="select-product-btn" onclick="selectProductForCheckout(this)">اختيار السلعة</button>';
+            
+            gridContainer.appendChild(card);
+        });
+    }
+
+    window.selectProductForCheckout = function(button) {
+        var card = button.closest('.store-product-card');
+        var titleElement = card ? card.querySelector('.product-name') : null;
+        var productTitle = titleElement ? titleElement.textContent : "سلعة غير معروفة";
+
+        alert('تم اختيار السلعة ("' + productTitle + '") بنجاح! يمكنك إتمام عملية الوساطة أو التواصل عبر المنصة.');
+    }
+    // دالة موحدة لنشر أو تحديث المنتج
+    window.addOrUpdateProduct = async function() {
+        if (editingProductId) {
+            await updateVendorProductData(editingProductId);
+        } else {
+            await addVendorProduct();
+        }
+    }
+    // دالة نشر المنتج الجديد
+    async function addVendorProduct() {
+        var name = document.getElementById('pName').value.trim();
+        var priceVal = document.getElementById('pPrice').value.trim();
+        var currency = document.getElementById('pCurrency').value;
+        var category = document.getElementById('pCategory').value;
+        var condition = document.getElementById('pCondition').value;
+        var quantity = document.getElementById('pQuantity').value.trim() || 'متاح';
+        var desc = document.getElementById('pDesc').value.trim();
+        var fileInput = document.getElementById('pImagesFiles');
+        
+        var activeVendor = JSON.parse(localStorage.getItem('currentVendor'));
+
+        if (!name || !priceVal) {
+            alert('الرجاء إدخال اسم السلعة والسعر على الأقل!');
+            return;
+        }
+
+        var fullPrice = priceVal + ' ' + currency;
+        let imageUrl = '';
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const cleanFileName = file.name.replace(/\s+/g, '_');
+            const fileName = `${Date.now()}_${cleanFileName}`;
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('products-images')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert("فشل رفع الصورة للسيرفر: " + uploadError.message);
+                return;
+            }
+
+            const { data: publicUrlData } = supabase.storage
+                .from('products-images')
+                .getPublicUrl(fileName);
+
+            imageUrl = publicUrlData.publicUrl;
+        }
+
+        const { error } = await supabase
+            .from('products')
+            .insert([
+                { 
+                    title: name,
+                    price: fullPrice,
+                    desc: desc,
+                    image: imageUrl || null,
+                    category: category,
+                    sellerName: activeVendor.name
+                }
+            ]);
+
+        if (error) {
+            alert('حدث خطأ ولم يتم حفظ المنتج في قاعدة البيانات: ' + error.message);
+            return;
+        }
+
+        clearForm();
+        loadVendorProducts();
+        alert('تم نشر السلعة بكامل تفاصيلها وحفظها في السيرفر بنجاح!');
+    }
+
+    // دالة جلب بيانات السلعة لتعبئتها في النموذج بغرض التعديل
+    window.prepareEditProduct = async function(productId) {
+        var { data: product, error } = await supabase
+            .from('products')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (error || !product) {
+            alert('تعذر جلب بيانات السلعة للتعديل.');
+            return;
+        }
+
+        document.getElementById('pName').value = product.title || '';
+        
+        // استخراج الرقم والعملة من السعر المخزن
+        var priceParts = (product.price || '').split(' ');
+        document.getElementById('pPrice').value = priceParts[0] || '';
+        if (priceParts[1]) {
+            document.getElementById('pCurrency').value = priceParts[1];
+        }
+
+        document.getElementById('pCategory').value = product.category || 'إلكترونيات وجوالات';
+        document.getElementById('pDesc').value = product.desc || '';
+
+        editingProductId = productId; // تفعيل وضع التعديل
+
+        // تغيير عنوان وحجم زر النشر ليصبح زر تحديث
+        var submitBtn = document.getElementById('actionBtn');
+        submitBtn.innerText = 'حفظ التعديلات على السلعة';
+        submitBtn.style.background = 'var(--success)';
+        // إضافة زر إلغاء التعديل إذا لم يكن موجوداً
+        if (!document.getElementById('cancelEditBtn')) {
+            var cancelBtn = document.createElement('button');
+            cancelBtn.id = 'cancelEditBtn';
+            cancelBtn.innerText = 'إلغاء التعديل';
+            cancelBtn.style.background = '#64748b';
+            cancelBtn.style.marginTop = '8px';
+            cancelBtn.onclick = window.cancelEdit;
+            submitBtn.parentNode.appendChild(cancelBtn);
+        }
+
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+    async function deleteProduct(productId) {
+    if (!confirm('هل أنت متأكد من رغبتك في حذف هذه السلعة نهائياً؟')) {
+        return;
+    }
+
+    // تنفيذ طلب الحذف من جدول products بالاعتماد على معرف السلعة id
+    const { error } = await supabaseClient
+        .from('products')
+        .delete()
+        .eq('id', productId);
+
+    if (error) {
+        console.error('خطأ أثناء الحذف:', error.message);
+        alert('حدث خطأ أثناء محاولة حذف السلعة. يرجى المحاولة مرة أخرى.');
+        return;
+    }
+
+    alert('تم حذف السلعة بنجاح!');
+    
+    // إعادة تحميل قائمة السلع لتحديث الشاشة فوراً
+    if (typeof loadVendorProducts === 'function') {
+        loadVendorProducts();
+    } else if (typeof loadProducts === 'function') {
+        loadProducts();
+    } else {
+        location.reload();
+    }
+}
+
+    // دالة تنفيذ التعديل وإرساله لقاعدة البيانات
+    async function updateVendorProductData(productId) {
+        var name = document.getElementById('pName').value.trim();
+        var priceVal = document.getElementById('pPrice').value.trim();
+        var currency = document.getElementById('pCurrency').value;
+        var category = document.getElementById('pCategory').value;
+        var desc = document.getElementById('pDesc').value.trim();
+        var fileInput = document.getElementById('pImagesFiles');
+
+        if (!name || !priceVal) {
+            alert('الرجاء إدخال اسم السلعة والسعر على الأقل!');
+            return;
+        }
+
+        var fullPrice = priceVal + ' ' + currency;
+        let updateData = {
+            title: name,
+            price: fullPrice,
+            desc: desc,
+            category: category
+        };
+
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const cleanFileName = file.name.replace(/\s+/g, '_');
+            const fileName = `${Date.now()}_${cleanFileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('products-images')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert("فشل رفع الصورة الجديدة: " + uploadError.message);
+                return;
+            }
+
+            const { data: publicUrlData } = supabase.storage
+                .from('products-images')
+                .getPublicUrl(fileName);
+
+            updateData.image = publicUrlData.publicUrl;
+        }
+
+        const { error } = await supabase
+            .from('products')
+            .update(updateData)
+            .eq('id', productId);
+
+        if (error) {
+            alert('فشل تحديث السلعة: ' + error.message);
+            return;
+        }
+
+        window.cancelEdit();
+        clearForm();
+        loadVendorProducts();
+        alert('تم تحديث السلعة بنجاح!');
+    }
+
+    // إلغاء وضع التعديل والعودة لوضع الإضافة العادية
+    window.cancelEdit = function() {
+        editingProductId = null;
+        clearForm();
+        var submitBtn = document.getElementById('actionBtn');
+        submitBtn.innerText = 'نشر السلعة في المنصة الرئيسية';
+        submitBtn.style.background = 'var(--primary)';
+        
+        var cancelBtn = document.getElementById('cancelEditBtn');
+        if (cancelBtn) cancelBtn.remove();
+    }
+
+    function clearForm() {
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pQuantity').value = '';
+        document.getElementById('pDesc').value = '';
+        document.getElementById('pImagesFiles').value = '';
+    }
+
+    window.loadVendorProducts = async function() {
+        var activeVendor = JSON.parse(localStorage.getItem('currentVendor'));
+        var container = document.getElementById('myProductsList');
+        container.innerHTML = '';
+
+        var { data: myProducts, error } = await supabase
+            .from('products')
+            .select('*')
+            .eq('sellerName', activeVendor.name);
+
+        if (error) {
+            console.error('خطأ في جلب سلع التاجر:', error);
+            myProducts = [];
+        }
+
+        if (!myProducts || myProducts.length === 0) {
+            container.innerHTML = '<p style="color: #64748b; text-align: center; background: #fff; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0;">ليس لديك أي سلع معروضة حالياً.</p>';
+            return;
+        }
+        myProducts.forEach(function(product) {
+            var div = document.createElement('div');
+            div.className = 'product-item';
+            div.innerHTML = '<div>' +
+                '<strong>' + product.title + '</strong><br>' +
+                '<span style="color: var(--success); font-weight: bold; font-size: 13px;">' + product.price + '</span> - ' +
+                '<span style="color: #64748b; font-size: 12px;">' + product.category + '</span>' +
+                '</div>' +
+                '<div style="display: flex; gap: 8px;">' +
+                '<button style="background: #f59e0b; width: auto; padding: 6px 12px; font-size: 13px;" onclick="prepareEditProduct(\'' + product.id + '\')">تعديل</button>' +
+                '<button class="delete-btn" onclick="deleteVendorProduct(\'' + product.id + '\')">حذف</button>' +
+                '</div>';
+            container.appendChild(div);
+        });
+    }
+
+    window.deleteVendorProduct = async function(productId) {
+        if (!confirm('هل أنت متأكد من حذف هذه السلعة نهائياً؟')) return;
+
+        const { error } = await supabase
+            .from('products')
+            .delete()
+            .eq('id', productId);
+
+        if (error) {
+            alert('تعذر حذف السلعة.');
+            return;
+        }
+
+        loadVendorProducts();
+    }
+</script>
+
+</body>
+</html>

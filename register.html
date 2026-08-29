@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب بائع جديد - منصة وجهتك</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; text-align: right; }
+        body { background-color: #f4f7f6; color: #333; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .register-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; max-width: 500px; }
+        h2 { color: #1e293b; margin-bottom: 20px; font-size: 22px; text-align: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #334155; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: white; }
+        .btn { width: 100%; padding: 12px; background: #16a34a; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; margin-top: 10px; }
+        .btn:hover { background: #15803d; }
+        .links { text-align: center; margin-top: 15px; font-size: 13px; }
+        .links a { color: #0284c7; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="register-container">
+        <h2>📝 تسجيل حساب بائع جديد</h2>
+        
+        <div class="form-group">
+            <label>اسم المستخدم:</label>
+            <input type="text" id="regUser" placeholder="اختر اسم مستخدم فريد (مثال: majd_store)">
+        </div>
+
+        <div class="form-group">
+            <label>رقم الجوال أو البريد:</label>
+            <input type="text" id="regContact" placeholder="أدخل وسائل التواصل...">
+        </div>
+
+        <!-- الدولة (قائمة الدول العربية) -->
+        <div class="form-group">
+            <label>الدولة:</label>
+            <select id="regCountry">
+                <option value="اليمن">اليمن</option>
+                <option value="المملكة العربية السعودية">المملكة العربية السعودية</option>
+                <option value="الإمارات العربية المتحدة">الإمارات العربية المتحدة</option>
+                <option value="جمهورية مصر العربية">جمهورية مصر العربية</option>
+                <option value="الكويت">الكويت</option>
+                <option value="قطر">قطر</option>
+                <option value="سلطنة عمان">سلطنة عمان</option>
+                <option value="البحرين">البحرين</option>
+                <option value="الأردن">الأردن</option>
+                <option value="العراق">العراق</option>
+                <option value="فلسطين">فلسطين</option>
+                <option value="سوريا">سوريا</option>
+                <option value="لبنان">لبنان</option>
+                <option value="السودان">السودان</option>
+                <option value="المغرب">المغرب</option>
+                <option value="الجزائر">الجزائر</option>
+                <option value="تونس">تونس</option>
+                <option value="ليبيا">ليبيا</option>
+            </select>
+        </div>
+
+        <!-- رقم الهوية -->
+        <div class="form-group">
+            <label>رقم الهوية / الإقامة:</label>
+            <input type="text" id="regIdNumber" placeholder="أدخل رقم الهوية الرسمي...">
+        </div>
+
+        <!-- صورة البطاقة الشخصية (اختياري) -->
+        <div class="form-group">
+            <label>صورة البطاقة الشخصية (اختياري):</label>
+            <input type="file" id="regIdImage" accept="image/*" style="padding: 8px;">
+        </div>
+
+        <div class="form-group">
+            <label>كلمة المرور:</label>
+            <input type="password" id="regPass" placeholder="اختر كلمة مرور قوية">
+        </div>
+
+        <button class="btn" onclick="registerNewSeller()">إنشاء الحساب الآن</button>
+        <div class="links">
+            <p>لديك حساب بالفعل؟ <a href="my-products.html">تسجيل الدخول</a></p>
+            <p style="margin-top: 8px;"><a href="index.html">← العودة للرئيسية</a></p>
+        </div>
+    </div>
+
+    <script>
+        function registerNewSeller() {
+            var user = document.getElementById('regUser').value.trim();
+            var contact = document.getElementById('regContact').value.trim();
+            var country = document.getElementById('regCountry').value;
+            var idNumber = document.getElementById('regIdNumber').value.trim();
+            var pass = document.getElementById('regPass').value.trim();
+            var fileInput = document.getElementById('regIdImage');
+
+            if (!user || !pass || !idNumber) {
+                alert('الرجاء إدخال اسم المستخدم، رقم الهوية، وكلمة المرور على الأقل!');
+                return;
+            }
+
+            var sellers = JSON.parse(localStorage.getItem('platformSellers')) || [];
+
+            for (var i = 0; i < sellers.length; i++) {
+                if (sellers[i].username === user) {
+                    alert('اسم المستخدم هذا مستخدم مسبقاً، اختر اسمًا آخر!');
+                    return;
+                }
+            }
+
+            // التعامل مع رفع صورة البطاقة الشخصية اختيارياً
+            var reader = new FileReader();
+            if (fileInput.files && fileInput.files[0]) {
+                reader.onload = function(e) {
+                    saveSellerData(user, contact, country, idNumber, pass, e.target.result, sellers);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                saveSellerData(user, contact, country, idNumber, pass, '', sellers);
+            }
+        }
+
+        function saveSellerData(user, contact, country, idNumber, pass, idImage, sellers) {
+            sellers.push({
+                username: user,
+                contact: contact,
+                country: country,
+                idNumber: idNumber,
+                password: pass,
+                idImage: idImage
+            });
+
+            localStorage.setItem('platformSellers', JSON.stringify(sellers));
+
+            alert('تم إنشاء الحساب بنجاح وتوثيق بيانات الهوية والدولة!');
+            window.location.href = 'my-products.html';
+        }
+    </script>
+</body>
+</html>

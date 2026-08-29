@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة وجهتك - تواصل معنا والدعم الفني</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; text-align: right; }
+        body { background-color: #f4f7f6; color: #333; }
+        
+        header { 
+            background-color: #1e293b; 
+            color: white; 
+            padding: 12px 25px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
+        
+        .logo-text { font-size: 20px; font-weight: bold; color: #38bdf8; text-decoration: none; }
+        .nav-links { display: flex; gap: 8px; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; padding: 8px 12px; border-radius: 5px; font-size: 13px; background: #334155; }
+        .nav-links .home-btn { background: #0284c7; }
+
+        .container { max-width: 800px; margin: 30px auto; padding: 0 15px; }
+        
+        .contact-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: center; }
+        .contact-box h2 { color: #1e293b; margin-bottom: 10px; font-size: 24px; }
+        .contact-box p { color: #64748b; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
+
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        
+        .contact-card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 10px; text-decoration: none; color: #334155; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .contact-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+        .contact-card.whatsapp { border-color: #bbf7d0; background: #f0fdf4; }
+        .contact-card.whatsapp h3 { color: #16a34a; }
+        
+        .contact-card h3 { font-size: 18px; color: #1e293b; }
+        .contact-card p { font-size: 14px; color: #475569; margin: 0; }
+
+        .icon { font-size: 32px; margin-bottom: 5px; }
+
+        /* نموذج إرسال رسالة مباشرة للمدير */
+        .direct-msg-section { text-align: right; background: #f8fafc; padding: 20px; border-radius: 10px; border: 1px solid #e2e8f0; margin-top: 20px; }
+        .direct-msg-section h3 { font-size: 18px; color: #1e293b; margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #334155; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; }
+        .form-group textarea { height: 100px; resize: vertical; }
+        .submit-btn { width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; transition: background 0.2s; }
+        .submit-btn:hover { background: #0369a1; }
+        
+        .success-msg { color: #16a34a; font-weight: bold; margin-top: 15px; display: none; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-text">منصة وجهتك 📞 (الدعم الفني)</a>
+        <div class="nav-links">
+            <a href="index.html" class="home-btn">🏠 الرئيسية</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="contact-box">
+            <h2>نحن هنا لمساعدتك في أي وقت</h2>
+            <p>إذا واجهتك أي مشكلة في طلب وساطة، أو أردت الاستفسار عن سلعة، أو التواصل المباشر مع إدارة المنصة، يمكنك اختيار إحدى الطرق أدناه:</p>
+            !-- وسائل التواصل السريع -->
+            <div class="contact-grid">
+                <!-- زر الواتساب (ضع رقمك مكان رقم الهاتف أدناه) -->
+                <a href="https://wa.me/967773211443?text=مرحباً، أود الاستفسار بخصوص منصة ميلاد" target="_blank" class="contact-card whatsapp">
+                    <div class="icon">💬</div>
+                    <h3>تواصل عبر واتساب</h3>
+                    <p>محادثة فورية وسريعة مع الإدارة</p>
+                </a>
+
+                <!-- زر الاتصال المباشر -->
+                <a href="tel:+967739918827" class="contact-card">
+                    <div class="icon">📞</div>
+                    <h3>اتصال هاتفي</h3>
+                    <p>متاح للأوقات الطارئة والصفقات</p>
+                </a>
+            </div>
+
+            <!-- نموذج مراسلة داخلية -->
+            <div class="direct-msg-section">
+                <h3>✉️ اترك لنا رسالة أو استفساراً</h3>
+                <div class="form-group">
+                    <label>اسمك أو معرفك:</label>
+                    <input type="text" id="msgName" placeholder="أدخل اسمك هنا">
+                </div>
+                <div class="form-group">
+                    <label>نص الرسالة أو المشكلة:</label>
+                    <textarea id="msgContent" placeholder="اكتب تفاصيل استفسارك أو مشكلتك بوضوح..."></textarea>
+                </div>
+                <button class="submit-btn" onclick="sendDirectMessage()">إرسال الرسالة للإدارة</button>
+                <div id="msgSuccess" class="success-msg">✅ تم إرسال رسالتك بنجاح إلى إدارة المنصة!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function sendDirectMessage() {
+            var name = document.getElementById('msgName').value.trim();
+            var content = document.getElementById('msgContent').value.trim();
+
+            if (!name || !content) {
+                alert('الرجاء إدخال الاسم ومحتوى الرسالة أولاً!');
+                return;
+            }
+
+            // تخزين الرسالة في الـ localStorage لتظهر في لوحة التحكم الإدارية إن أردت متابعتها
+            var messageObj = {
+                id: 'MSG-' + Math.floor(1000 + Math.random() * 9000),
+                name: name,
+                content: content,
+                date: new Date().toLocaleDateString()
+            };
+
+            var messages = JSON.parse(localStorage.getItem('platformMessages')) || [];
+            messages.push(messageObj);
+            localStorage.setItem('platformMessages', JSON.stringify(messages));
+
+            // إظهار رسالة النجاح وتفريغ الحقول
+            document.getElementById('msgSuccess').style.display = 'block';
+            document.getElementById('msgName').value = '';
+            document.getElementById('msgContent').value = '';
+
+            setTimeout(() => {
+                document.getElementById('msgSuccess').style.display = 'none';
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

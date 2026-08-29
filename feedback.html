@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>الاقتراحات والشكاوى - منصة وجهتك</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background-color: #f1f5f9; padding: 20px; }
+        .feedback-container { max-width: 500px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1e293b; margin-bottom: 10px; }
+        p.subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #334155; }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #cbd5e1; border-radius: 6px; }
+        button { width: 100%; padding: 12px; background-color: #0284c7; color: white; border: none; margin-top: 25px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0369a1; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #64748b; text-decoration: none; font-size: 14px; }
+        .back-link:hover { color: #1e293b; }
+    </style>
+</head>
+<body>
+
+<div class="feedback-container">
+    <h2>الاقتراحات والشكاوى</h2>
+    <p class="subtitle">نسعد بتواصلك معنا لتحسين جودة خدمات منصة وجهتك</p>
+    
+    <form>
+        <label>الاسم الكريم</label>
+        <input type="text" placeholder="أدخل اسمك (اختياري)">
+
+        <label>رقم الهاتف أو وسيلة التواصل</label>
+        <input type="text" placeholder="رقم الهاتف للرد عليك">
+
+        <label>نوع الرسالة</label>
+        <select>
+            <option>اقتراح لتطوير التطبيق</option>
+            <option>شكوى بخصوص سلعة أو تاجر</option>
+            <option>استفسار عام</option>
+        </select>
+
+        <label>تفاصيل الرسالة</label>
+        <textarea rows="5" placeholder="اكتب اقتراحك أو شكواك هنا بالتفصيل..."></textarea>
+
+        <button type="submit">إرسال إلى الإدارة</button>
+    </form>
+
+    <a href="index.html" class="back-link">← العودة إلى الرئيسية</a>
+</div>
+
+</body>
+</html>

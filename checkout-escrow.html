@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة وجهتك - نظام الوساطة المالية الآمن</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; text-align: right; }
+        body { background-color: #f4f7f6; color: #333; padding-bottom: 40px; }
+        
+        header {
+            background-color: #1e293b;
+            color: white;
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo-text { font-size: 20px; font-weight: bold; color: #38bdf8; text-decoration: none; }
+        .nav-links a { color: white; text-decoration: none; padding: 8px 12px; border-radius: 5px; font-size: 13px; background: #334155; }
+        .nav-links .home-btn { background: #0284c7; }
+
+        .container { max-width: 800px; margin: 30px auto; padding: 0 15px; }
+        
+        .escrow-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .escrow-box h2 { color: #1e293b; margin-bottom: 10px; font-size: 22px; }
+        .escrow-box p { color: #64748b; font-size: 14px; margin-bottom: 20px; line-height: 1.6; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #334155; font-size: 14px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
+        .form-group textarea { height: 100px; resize: vertical; }
+
+        .submit-btn { width: 100%; background: #16a34a; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; transition: background 0.2s; margin-top: 10px; }
+        .submit-btn:hover { background: #15803d; }
+
+        .alert-success { background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; padding: 15px; border-radius: 8px; margin-top: 20px; display: none; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-text">منصة وجهتك 🛡 (الوساطة المالية المضمونة)</a>
+        <div class="nav-links">
+            <a href="index.html" class="home-btn">🏠 الرئيسية</a>
+        </div>
+    </header>
+
+    <!-- صندوق نسخ رقم حساب المنصة المرتم -->
+    <div style="max-width: 800px; margin: 20px auto; padding: 0 15px;">
+        <div style="background: #f8fafc; border: 1px solid #cbd5e1; padding: 20px; border-radius: 12px; text-align: right; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #1e293b; font-size: 15px;">رقم حساب المنصة المعتمد للتحويل:</p>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; align-items: center;">
+                <button type="button" onclick="copyAccountText()" style="padding: 12px 20px; background: #0284c7; color: white; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: bold; transition: 0.2s;">نسخ الرقم</button>
+                <input type="text" id="platformAccount" value="3027567575" readonly style="width: 65%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; text-align: right; background: #fff; outline: none; color: #0f172a; font-weight: bold;">
+            </div>
+            <span id="copyMsg" style="color: #16a34a; display: none; margin-top: 8px; font-size: 13px; font-weight: bold;">تم نسخ الرقم بنجاح!</span>
+        </div>
+    </div>
+    <div class="container">
+        <div class="escrow-box">
+            <h2>🛡 فتح طلب وساطة مالية آمنة</h2>
+            <p>نحن نعمل كحلقة وصل أمينة بين المشتري والبائع. يتم حجز المبلغ لدينا حتى استلاستلام السلعة والتأكد من مطابقتها للمواصفات، ثم يتم تحويله للبائع.</p>
+           
+            <div class="form-group">
+                <label>اسمك (المشتري):</label>
+                <input type="text" id="buyerName" placeholder="أدخل اسمك الكريم">
+            </div>
+
+            <div class="form-group">
+                <label>اسم البائع أو معرفه:</label>
+                <input type="text" id="sellerName" placeholder="اسم البائع على المنصة أو رقمه">
+            </div>
+
+            <div class="form-group">
+                <label>اسم السلعة أو تفاصيلها:</label>
+                <input type="text" id="itemName" placeholder="مثال: جوال ال تي سي 27 بحالة ممتازة">
+            </div>
+
+            <!-- حقل المبلغ والعملة -->
+            <div class="form-group">
+                <label>المبلغ المتفق عليه للسلعة:</label>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <input type="number" id="amountInput" placeholder="أدخل الرقم مثلاً: 150" oninput="calculateEscrowFee()" style="width: 70%;">
+                    <select id="currencySelect" onchange="calculateEscrowFee()" style="width: 28%; cursor: pointer;">
+                        <option value="$">دولار ($)</option>
+                        <option value="ر.ي">ريال يمني (ر.ي)</option>
+                        <option value="ر.س">ريال سعودي (ر.س)</option>
+                        <option value="ر.ع">ريال عماني (ر.ع)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- صندوق حساب الرسوم -->
+            <div id="escrowFeeBox" style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #475569; display: none; text-align: right;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                    <span id="feeAmount" style="font-weight: bold; color: #0f172a;">0</span>
+                    <span>رسوم وساطة المنصة (2%):</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 8px; margin-top: 5px;">
+                    <span id="totalAmount" style="font-weight: bold; color: #16a34a; font-size: 16px;">0</span>
+                    <span style="font-weight: bold; color: #1e293b;">المبلغ الإجمالي للإيداع:</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>طريقة الدفع المستخدمة / رقم الحوالة أو الإيصال:</label>
+                <textarea id="paymentDetails" placeholder="اكتب تفاصيل طريقة الدفع (مثل اسم شبكة الحوالات ورقم الإيصال)..."></textarea>
+            </div>
+            <div class="form-group">
+    <label for="deliveryDetails">عنوان ومكان التوصيل / تفاصيل الاستلام:</label>
+    <textarea id="deliveryDetails" placeholder="مثال: المدينة، المديرية، الشارع، أو طريقة الشحن المفضلة..."></textarea>
+</div>
+<div class="escrow-terms-box" style="background: #fff8e1; border: 1px solid #ffe082; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; color: #5d4037;">
+    <h4 style="margin: 0 0 8px 0; color: #f57f17; font-size: 16px;">🛡️ شروط الضمان والفحص:</h4>
+    <p style="margin: 0; line-height: 1.6;">
+        - يحق للمشتري فحص السلعة واستلامها والتاكد من مطابقتها للمواصفات خلال <strong>24 ساعة</strong> من وقت الاستلام.<br>
+        - لا يتم تسليم مبلغ الوساطة للبائع إلا بعد موافقة المشتري وإشعاره للإدارة بسلامة السلعة وخلوها من العيوب المخفية.
+    </p>
+</div>
+<div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+    <input type="checkbox" id="agreeTerms" style="width: 18px; height: 18px;">
+    <label for="agreeTerms" style="cursor: pointer; font-size: 14px;">أقر بأنني قرأت شروط الوساطة وأوافق على سياسة فحص السلعة وضمان الحقوق.</label>
+</div>
+            <button class="submit-btn" onclick="submitEscrowRequest()">تثبيت وفتح طلب الوساطة وإرسال التأكيد للإدارة</button>
+            <div id="successAlert" class="alert-success">
+                ✅ تم إرسال طلب الوساطة بنجاح! سيتم تحويلك الآن لتأكيد الطلب عبر الواتساب.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // استقبال البيانات تلقائياً من الرابط عند التحميل
+        window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            
+            var item = urlParams.get('item');
+            var price = urlParams.get('price');
+            var seller = urlParams.get('seller');
+            var currency = urlParams.get('currency');
+
+            if (item) {
+                document.getElementById('itemName').value = decodeURIComponent(item);
+            }
+            if (seller) {
+                document.getElementById('sellerName').value = decodeURIComponent(seller);
+                }
+            if (price) {
+                // استخراج الرقم فقط من نص السعر (مثلاً لو كان القادم "$")
+                var numericPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+                if (!isNaN(numericPrice)) {
+                    document.getElementById('amountInput').value = numericPrice;
+                }
+            }
+            if (currency) {
+                var currencySelect = document.getElementById('currencySelect');
+                for (var i = 0; i < currencySelect.options.length; i++) {
+                    if (currencySelect.options[i].value === currency || price.includes(currencySelect.options[i].value)) {
+                        currencySelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            // تشغيل حساب الرسوم تلقائياً إذا وُجد السعر
+            calculateEscrowFee();
+        };
+
+        // 1. دالة حساب رسوم الوساطة
+        function calculateEscrowFee() {
+            var rawAmount = document.getElementById('amountInput').value;
+            var feeBox = document.getElementById('escrowFeeBox');
+            var feeSpan = document.getElementById('feeAmount');
+            var totalSpan = document.getElementById('totalAmount');
+            var currency = document.getElementById('currencySelect').value;
+
+            if (!rawAmount || parseFloat(rawAmount) <= 0) {
+                feeBox.style.display = 'none';
+                return;
+            }
+
+            var amount = parseFloat(rawAmount);
+            var fee = amount * 0.02;
+            var total = amount + fee;
+
+            feeBox.style.display = 'block';
+            feeSpan.textContent = fee.toFixed(2) + ' ' + currency;
+            totalSpan.textContent = total.toFixed(2) + ' ' + currency;
+        }
+
+        // 2. دالة نسخ رقم الحساب
+        function copyAccountText() {
+            var copyText = document.getElementById("platformAccount");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+
+            var msg = document.getElementById("copyMsg");
+            msg.style.display = "block";
+            setTimeout(function() {
+                msg.style.display = "none";
+            }, 2500);
+        }
+        window.addEventListener('DOMContentLoaded', (event) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productName = urlParams.get('product');
+    const sellerName = urlParams.get('seller');
+    const productPrice = urlParams.get('price');
+
+    if (sellerName) {
+        const sellerInput = document.getElementById('sellerName');
+        if (sellerInput) sellerInput.value = sellerName;
+    }
+
+    if (productName) {
+        const itemInput = document.getElementById('itemName');
+        if (itemInput) itemInput.value = productName;
+    }
+
+    if (productPrice) {
+        const amountInput = document.getElementById('amountInput');
+        if (amountInput) {
+            amountInput.value = productPrice;
+            // إذا كنت تريد تحديث حساب العمولة تلقائياً فور تعبئة السعر، يمكنك استدعاء دالة حساب العمولة هنا إن وجدت
+        }
+    }
+});
+
+        // 3. دالة إرسال الطلب وفتح الواتساب
+        function submitEscrowRequest() {
+            var buyerName = document.getElementById('buyerName').value.trim();
+            var sellerName = document.getElementById('sellerName').value.trim();
+            var itemName = document.getElementById('itemName').value.trim();
+            var amount = document.getElementById('amountInput').value.trim();
+            var currency = document.getElementById('currencySelect').value;
+            var paymentDetails = document.getElementById('paymentDetails').value.trim();
+            var agreeTerms = document.getElementById('agreeTerms');
+if (agreeTerms && !agreeTerms.checked) {
+    alert('الرجاء الموافقة على شروط الضمان والفحص للمتابعة!');
+    return;
+}
+
+            if (!buyerName || !sellerName || !itemName || !amount || !paymentDetails) {
+                alert('خطأ: يرجى تعبئة كافة الحقول المطلوبة (اسم المشتري، البائع، السلعة، المبلغ، وتفاصيل الدفع)!');
+                return;
+            }
+            var deliveryDetails = document.getElementById('deliveryDetails').value.trim();
+
+// في نص رسالة الواتساب الجاهزة للإرسال، أضف السطر التالي:
++ "📍 *مكان التوصيل:* " + deliveryDetails + "\n"
+
+
+            var fee = (parseFloat(amount) * 0.02).toFixed(2);
+            var total = (parseFloat(amount) + parseFloat(fee)).toFixed(2);
+
+            // إظهار تنبيه النجاح
+            document.getElementById('successAlert').style.display = 'block';
+
+            // تجهيز نص رسالة الواتساب للإدارة
+            var adminPhone = "967773211443"; // استبدل هذا الرقم برقم مشرف الوساطة الفعلي
+            var whatsappMessage = "🛡 *طلب وساطة مالية جديد - منصة وجهتك*\n\n" +
+                "👤 *المشتري:* " + buyerName + "\n" +
+                "🏷 *البائع:* " + sellerName + "\n" +
+                "📦 *السلعة:* " + itemName + "\n" +
+                "💰 *قيمة السلعة:* " + amount + " " + currency + "\n" +
+                "📊 *عمولة الوساطة (2%):* " + fee + " " + currency + "\n" +
+                "💵 *الإجمالي الكلي:* " + total + " " + currency + "\n" +
+                "📝 *تفاصيل وسند الدفع:* " + paymentDetails;
+                setTimeout(function() {
+                var encodedMessage = encodeURIComponent(whatsappMessage);
+                window.open("https://wa.me/" + adminPhone + "?text=" + encodedMessage, "_blank");
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

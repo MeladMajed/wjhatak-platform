@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فاتورة الطلب - منصة وجهتك</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; direction: rtl; text-align: right; }
+        body { background-color: #f4f7f6; color: #333; padding: 20px; }
+        
+        .invoice-container { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); border: 1px solid #e2e8f0; }
+        
+        .invoice-header { text-align: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 20px; }
+        .invoice-header h2 { color: #1e293b; font-size: 24px; margin-bottom: 5px; }
+        .invoice-header p { color: #64748b; font-size: 14px; }
+
+        .invoice-details { margin-bottom: 25px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f8fafc; font-size: 14px; }
+        .detail-row span:first-child { color: #64748b; font-weight: bold; }
+        .detail-row span:last-child { color: #1e293b; }
+
+        .success-badge { background: #dcfce7; color: #16a34a; padding: 10px; border-radius: 6px; text-align: center; font-weight: bold; margin-bottom: 20px; font-size: 14px; }
+
+        .actions { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: center; text-decoration: none; display: inline-block; }
+        .print-btn { background: #0284c7; color: white; }
+        .print-btn:hover { background: #0369a1; }
+        .home-btn { background: #334155; color: white; }
+        .home-btn:hover { background: #475569; }
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h2>منصة وجهتك للخدمات والسلع</h2>
+            <p>فاتورة إثبات طلب إلكتروني</p>
+        </div>
+
+        <div class="success-badge">
+            ✓ تم تسجيل طلبك بنجاح وهو قيد المراجعة والمعالجة
+        </div>
+
+        <div class="invoice-details" id="invoiceDetails"></div>
+
+        <div class="actions">
+            <button class="btn print-btn" onclick="window.print()">طباعة الفاتورة</button>
+            <a href="index.html" class="btn home-btn">العودة للرئيسية</a>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            let orders = JSON.parse(localStorage.getItem('platformOrders')) || [];
+            const container = document.getElementById('invoiceDetails');
+            container.innerHTML = '';
+
+            if (orders.length > 0) {
+                const latestOrder = orders[0];
+
+                function createRow(label, value, isStatus = false) {
+                    const row = document.createElement('div');
+                    row.className = 'detail-row';
+                    
+                    const spanLabel = document.createElement('span');
+                    spanLabel.textContent = label;
+                    
+                    const spanVal = document.createElement('span');
+                    spanVal.textContent = value;
+                    if (isStatus) {
+                        spanVal.style.color = '#d97706';
+                        spanVal.style.fontWeight = 'bold';
+                    }
+
+                    row.appendChild(spanLabel);
+                    row.appendChild(spanVal);
+                    return row;
+                }
+
+                container.appendChild(createRow('رقم الفاتورة:', latestOrder.id));
+                container.appendChild(createRow('نوع الخدمة / الطلب:', latestOrder.service));
+                container.appendChild(createRow('التفاصيل المدخلة:', latestOrder.details));
+                container.appendChild(createRow('حالة الطلب:', latestOrder.status, true));
+                } else {
+                const p = document.createElement('p');
+                p.style.textAlign = 'center';
+                p.style.color = '#64748b';
+                p.textContent = 'لا توجد طلبات حديثة لعرض فاتورتها حالياً.';
+                container.appendChild(p);
+            }
+        };
+    </script>
+
+</body>
+</html>
