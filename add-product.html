@@ -185,29 +185,80 @@
                 storeProduct(vendorName, title, category, country, region, condition, features, flaws, fullPrice, '');
             }
         }
+        function saveNewProduct() {
+    const fileInput = document.getElementById('productImage'); // تأكد من مطابقة الـ ID لحقل رفع الصورة لديك
+    const titleInput = document.getElementById('title').value; // حقل العنوان أو الوصف
+    
+    // 1. الكلمات المفتاحية أو النصوص الممنوعة (يمكنك توسيع القائمة حسب الحاجة)
+    const forbiddenWords = ['كلمة_مخالفة_1', 'كلمة_مخالفة_2'];
+    const containsForbiddenText = forbiddenWords.some(word => titleInput.includes(word));
+    
+    if (containsForbiddenText) {
+        alert("عذراً، النص المدخل يحتوي على كلمات غير لائقة ولا تتوافق مع سياسة المنصة.");
+        return;
+    }
 
-        function storeProduct(username, title, category, country, region, condition, features, flaws, price, image) {
-            var products = JSON.parse(localStorage.getItem('platformProducts')) || [];
-           
-            var newProduct = {
-                sellerName: username,
-                title: title,
-                category: category,
-                country: country,
-                region: region,
-                condition: condition,
-                features: features,
-                flaws: flaws,
-                price: price,
-                image: image // متوافق تماماً للعرض في الصفحة الرئيسية
-            };
+    const file = fileInput.files[0];
+    if (!file) {
+        alert("يرجى اختيار صورة للسلعة.");
+        return;
+    }
 
-            products.push(newProduct);
-            localStorage.setItem('platformProducts', JSON.stringify(products));
+    // 2. فحص نوع الملف (صورة فقط)
+    const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!validTypes.includes(file.type)) {
+        alert("عذراً، يرجى رفع صورة بصيغة JPG أو PNG فقط.");
+        return;
+    }
 
-            alert('تم التحقق من الحساب ونشر السلعة بنجاح!');
-            window.location.href = 'index.html';
-        }
+    // 3. فحص حجم الصورة (أقل من 5 ميجابايت مثلاً)
+    const maxSize = 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+        alert("حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 5 ميجابايت.");
+        return;
+    }
+
+    // قراءة الصورة وحفظها بعد اجتياز الفحص
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageBase64 = e.target.result;
+        storeProduct(imageBase64);
+    };
+    reader.readAsDataURL(file);
+}
+
+function storeProduct(image) {
+    var username = document.getElementById('username').value;
+    var title = document.getElementById('title').value;
+    var category = document.getElementById('category').value;
+    var country = document.getElementById('country').value;
+    var region = document.getElementById('region').value;
+    var condition = document.getElementById('condition').value;
+    var features = document.getElementById('features').value;
+    var flaws = document.getElementById('flaws').value;
+    var price = document.getElementById('price').value;
+
+    var products = JSON.parse(localStorage.getItem('platformProducts')) || [];
+
+    var newProduct = {
+        sellerName: username,
+        title: title,
+        category: category,
+        country: country,
+        region: region,
+        condition: condition,
+        features: features,
+        flaws: flaws,
+        price: price,
+        image: image 
+    };
+
+    products.push(newProduct);
+    localStorage.setItem('platformProducts', JSON.stringify(products));
+    
+    alert('تم التحقق من الحساب ونشر السلعة بنجاح!');
+    window.location.href = 'index.html';
+}
     </script>
 </body>
 </html>
