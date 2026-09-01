@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة التوثيق والأمان السيبراني - منصة وجهتك</title>
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
     <style>
         :root { --primary: #0284c7; --primary-dark: #0369a1; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; --card-bg: #ffffff; --text: #334155; --border: #cbd5e1; }
         body { font-family: Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--text); }
@@ -89,6 +90,7 @@
             <div class="form-group">
                 <label>تحميل صورة الهوية الشخصية / البطاقة:</label>
                 <input type="file" id="regIdFile" accept="image/*">
+                <input type="file" id="idImage" accept="image/*" onchange="verifyIDImage(event)">
             </div>
 
             <div class="form-group">
