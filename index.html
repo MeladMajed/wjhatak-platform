@@ -345,7 +345,7 @@
 
             var priceDiv = document.createElement('div');
             priceDiv.className = 'product-price';
-            priceDiv.textContent = safePrice + ' ر.ي';
+            priceDiv.textContent = safePrice + '';
             bodyDiv.appendChild(priceDiv);
 
             var sellerDiv = document.createElement('div');
@@ -410,7 +410,6 @@ async function deleteProduct(productId) {
         alert('حدث خطأ أثناء محاولة حذف السلعة');
     }
 }
-
 // دالة حذف جميع سلع تاجر معين أو حظر/حذف التاجر المخالف بناءً على اسم البائع (sellerName)
 async function deleteMerchantProducts(sellerName) {
     if (!confirm('هل أنت متأكد من حذف جميع منتجات ومرتجعات التاجر: ${sellerName}؟')) return;
