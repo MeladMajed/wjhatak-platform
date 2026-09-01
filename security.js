@@ -9,13 +9,14 @@
                   .replace(/'/g, "&#039;");
     };
 
-    // 2. التحقق من صحة وحالة المستخدم (هل حسابه مفعل ومعتمد؟)
+    // 2. التحقق من صحة وحالة المستخدم
     window.checkUserAuthStatus = function () {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
-        
         const path = window.location.pathname;
-        if (!currentUser && (path.includes('profile') || path.includes('add-product'))) {
-            alert('عذراً، يجب تسجيل الدخول وتوثيق الحساب أولاً للوصول لهذه الصفحة.');
+
+        // السماح بفتح صفحة التوثيق/الملف الشخصي بحرية، وتقييد صفحة إضافة المنتجات فقط
+        if (!currentUser && path.includes('add-product')) {
+            alert('عذراً، يجب تسجيل الدخول أولاً للوصول لهذه الصفحة.');
             window.location.href = 'index.html';
             return false;
         }
