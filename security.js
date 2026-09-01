@@ -13,7 +13,6 @@
     window.checkUserAuthStatus = function () {
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
         
-        // إذا كانت الصفحة الحالية تتطلب حساباً موثقاً وليست صفحة تسجيل أو رئيسية
         const path = window.location.pathname;
         if (!currentUser && (path.includes('profile') || path.includes('add-product'))) {
             alert('عذراً، يجب تسجيل الدخول وتوثيق الحساب أولاً للوصول لهذه الصفحة.');
@@ -21,7 +20,6 @@
             return false;
         }
 
-        // التحقق من حالة الحساب إذا كان معلقاً
         if (currentUser && currentUser.status === 'pending') {
             const restricted = path.includes('add-product') || path.includes('gaming');
             if (restricted) {
@@ -32,7 +30,7 @@
         return true;
     };
 
-    // 3. تأمين حقول المدخلات والنماذج تلقائياً ضد الحقن المتكرر
+    // 3. تأمين حقول المدخلات والنماذج تلقائياً
     document.addEventListener('DOMContentLoaded', () => {
         window.checkUserAuthStatus();
 
