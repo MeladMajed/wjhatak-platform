@@ -220,8 +220,7 @@
 
 <script type="module">
     import { supabase } from './supabase.js';
-    import { supabase } from './supabase.js';
-
+        window.supabase = supabase;
 document.addEventListener('DOMContentLoaded', () => {
     // استهداف النموذج أو زر الإرسال بناءً على العناصر الموجودة
     const submitBtn = document.querySelector('button[type="submit"]') || document.querySelector('button');
@@ -286,7 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-    window.supabase = supabase;
 
     let editingProductId = null; // متغير لتتبع ما إذا كنا نقوم بتعديل سلعة حالية
 
