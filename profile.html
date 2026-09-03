@@ -221,47 +221,43 @@
 <script type="module">
     import { supabase } from './supabase.js';
         window.supabase = supabase;
+
 document.addEventListener('DOMContentLoaded', () => {
-    // استهداف النموذج أو زر الإرسال بناءً على العناصر الموجودة
-    const submitBtn = document.querySelector('button[type="submit"]') || document.querySelector('button');
+    const submitBtn = document.getElementById('submitProfileBtn');
 
     if (submitBtn) {
         submitBtn.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            // مطابقة الـ IDs الظاهرة في ملف الـ HTML لديك
             const regName = document.getElementById('regName')?.value || '';
-            const phone = document.querySelector('input[type="tel"]')?.value || document.getElementById('phone')?.value || '';
-            const city = document.querySelector('input[placeholder*="صنعاء"]')?.value || document.getElementById('city')?.value || '';
+            const phone = document.getElementById('phone')?.value || document.querySelector('input[type="tel"]')?.value || '';
+            const city = document.getElementById('city')?.value || '';
             const fileInput = document.querySelector('input[type="file"]');
 
+            // طباعة للتأكد من قراءة البيانات في الـ Console
+            console.log("Submitting data:", { regName, phone, city });
+
             try {
-                // التحقق من تسجيل الدخول عبر Supabase Auth
                 const { data: { user }, error: authError } = await supabase.auth.getUser();
                 
                 if (authError || !user) {
-                    alert('عذراً، يجب تسجيل الدخول عبر حسابك أولاً.');
-                    window.location.href = 'index.html';
+                    alert('عذراً، يجب تسجيل الدخول أولاً.');
                     return;
                 }
 
                 let idCardUrl = '';
-
-                // رفع الهوية إذا تم اختيار ملف
                 if (fileInput && fileInput.files && fileInput.files[0]) {
                     const file = fileInput.files[0];
-                    const fileExt = file.name.split('.').pop();
-                    const filePath = `id-cards/${user.id}-${Date.now()}.${fileExt}`;
+                    const filePath = `id-cards/${user.id}-${Date.now()}.${file.name.split('.').pop()}`;
 
                     const { error: uploadError } = await supabase.storage
                         .from('id-cards')
                         .upload(filePath, file);
 
-                    if (uploadError) throw new Error('فشل رفع الملف: ' + uploadError.message);
+                    if (uploadError) throw new Error(uploadError.message);
                     idCardUrl = filePath;
                 }
 
-                // حفظ أو تحديث البيانات في جدول profiles
                 const { error: dbError } = await supabase
                     .from('profiles')
                     .upsert({
@@ -273,19 +269,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         status: 'pending'
                     });
 
-                if (dbError) throw new Error('فشل الحفظ: ' + dbError.message);
+                if (dbError) throw new Error(dbError.message);
 
-                alert('تم إرسال بيانات التوثيق بنجاح وهي قيد مراجعة الإدارة.');
+                alert('تم إرسال بيانات التوثيق بنجاح!');
                 window.location.href = 'index.html';
 
             } catch (err) {
-                console.error(err);
-                alert('حدث خطأ: ' + err.message);
+                console.error('Error details:', err);
+                alert('خطأ أثناء الحفظ: ' + err.message);
             }
         });
     }
 });
-
     let editingProductId = null; // متغير لتتبع ما إذا كنا نقوم بتعديل سلعة حالية
 
     window.onload = async function() {
